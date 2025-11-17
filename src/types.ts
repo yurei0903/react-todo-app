@@ -4,4 +4,5 @@ export type Todo = {
   isDone: boolean;
   priority: number;
   url: string | null;
+  price: number | null;
 };

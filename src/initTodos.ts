@@ -7,6 +7,7 @@ export const initTodos: Todo[] = [
     isDone: false,
     priority: 3,
     url: null,
+    price: null,
   },
   {
     id: uuid(),
@@ -14,6 +15,7 @@ export const initTodos: Todo[] = [
     isDone: false,
     priority: 3,
     url: null,
+    price: null,
   },
   {
     id: uuid(),
@@ -21,5 +23,6 @@ export const initTodos: Todo[] = [
     isDone: false,
     priority: 3,
     url: "https://takeshiwada1980.github.io/Programming3-2025/lecture04.html",
+    price: null,
   },
 ];

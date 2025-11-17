@@ -1,25 +1,31 @@
-import { useState ,useEffect} from "react";
+// App.tsx
+import { useState, useEffect, useRef } from "react";
 import type { Todo } from "./types";
 import { initTodos } from "./initTodos";
-import WelcomeMessage from "./WelcomeMessage";
+// import WelcomeMessage from "./WelcomeMessage"; // 今回は未使用なら削除
 import TodoList from "./TodoList";
 import { v4 as uuid } from "uuid";
-import dayjs from "dayjs";
-import { twMerge } from "tailwind-merge"; // ◀◀ 追加
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // ◀◀ 追加
-import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons"; // ◀◀ 追加
+import { twMerge } from "tailwind-merge";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTriangleExclamation } from "@fortawesome/free-solid-svg-icons";
 
 const App = () => {
-  const [todos, setTodos] = useState<Todo[]>([]); // ◀◀ 編集
+  // ... (Stateやロジック部分は変更なしなので省略します) ...
+  // ... remove, updateIsDone, plascard, minascard などもそのまま ...
+  // ... isValidTodoName などの関数もそのまま ...
+
+  // ★重要: ここから下のみ表示用レイアウトに合わせて変更します
+
+  const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodoName, setNewTodoName] = useState("");
   const [newTodoPriority, setNewTodoPriority] = useState(3);
   const [newTodourl, setNewTodourl] = useState<string | null>(null);
   const [newTodoNameError, setNewTodoNameError] = useState("");
+  const [newTodoPrice, setNewTodoPrice] = useState<number | null>(null);
+  const [initialized, setInitialized] = useState(false);
+  const localStorageKey = "TodoApp";
+  const dialogRef = useRef<HTMLDialogElement | null>(null);
 
-  const [initialized, setInitialized] = useState(false); // ◀◀ 追加
-  const localStorageKey = "TodoApp"; // ◀◀ 追加
-
-  // App コンポーネントの初回実行時のみLocalStorageからTodoデータを復元
   useEffect(() => {
     const todoJsonStr = localStorage.getItem(localStorageKey);
     if (todoJsonStr && todoJsonStr !== "[]") {
@@ -30,78 +36,97 @@ const App = () => {
       }));
       setTodos(convertedTodos);
     } else {
-      // LocalStorage にデータがない場合は initTodos をセットする
       setTodos(initTodos);
     }
     setInitialized(true);
   }, []);
 
-  // 状態 todos または initialized に変更があったときTodoデータを保存
   useEffect(() => {
     if (initialized) {
       localStorage.setItem(localStorageKey, JSON.stringify(todos));
     }
   }, [todos, initialized]);
 
-  const uncompletedCount = todos.filter(
-    (todo: Todo) => !todo.isDone
-  ).length;
+  const remove = (id: string) => {
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+  };
 
-
-  // ▼▼ 追加
-const remove = (id: string) => {
-  const updatedTodos = todos.filter((todo) => todo.id !== id);
-  setTodos(updatedTodos);
-};
-
-const removeCompletedTodos = () => {
-  const updatedTodos = todos.filter((todo) => !todo.isDone);
-  setTodos(updatedTodos);
-};
+  const removeCompletedTodos = () => {
+    const updatedTodos = todos.filter((todo) => !todo.isDone);
+    setTodos(updatedTodos);
+  };
 
   const updateIsDone = (id: string, value: boolean) => {
-  const updatedTodos = todos.map((todo) => {
-    if (todo.id === id) {
-      return { ...todo, isDone: value }; // スプレッド構文
-    } else {
-      return todo;
-    }
-  });
-  setTodos(updatedTodos);
-};
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, isDone: value };
+      } else {
+        return todo;
+      }
+    });
+    setTodos(updatedTodos);
+  };
+
+  const plascard = (id: string, value: number) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, priority: value + 1 };
+      } else {
+        return todo;
+      }
+    });
+    setTodos(updatedTodos);
+  };
+
+  const minascard = (id: string, value: number) => {
+    const updatedTodos = todos.map((todo) => {
+      if (todo.id === id) {
+        return { ...todo, priority: value - 1 };
+      } else {
+        return todo;
+      }
+    });
+    setTodos(updatedTodos);
+  };
+
   const isValidTodoName = (name: string): string => {
     if (name.length < 2 || name.length > 113) {
-      return "2文字以上、32文字以内で入力してください";
+      return "2文字以上、113文字以内で入力してください";
     } else {
       return "";
     }
   };
-  
 
   const updateNewTodoName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNewTodoNameError(isValidTodoName(e.target.value)); // ◀◀ 追加
+    setNewTodoNameError(isValidTodoName(e.target.value));
     setNewTodoName(e.target.value);
   };
 
   const updateNewTodoPriority = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewTodoPriority(Number(e.target.value));
   };
+
   const updateNewTodourl = (e: React.ChangeEvent<HTMLInputElement>) => {
     const url = e.target.value;
     setNewTodourl(url === "" ? null : url);
-    console.log(newTodourl);
   };
-  const plascard=(value:number) =>{
-    setNewTodoPriority(value+1);
+
+  const updateNewTodoPrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.valueAsNumber; 
+    const safeValue = isNaN(newValue) ? 0 : newValue;
+    setNewTodoPrice(safeValue);
+  }
+
+  const openModal = () => {
+    dialogRef.current?.showModal();
   };
-  // const updateDeadline = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const dt = e.target.value; // UIで日時が未設定のときは空文字列 "" が dt に格納される
-  //   console.log(`UI操作で日時が "${dt}" (${typeof dt}型) に変更されました。`);
-  //   setNewTodoDeadline(dt === "" ? null : new Date(dt));
-  // };
+
+  const closeModal = () => {
+    dialogRef.current?.close();
+  };
 
   const addNewTodo = () => {
-    // ▼▼ 編集
     const err = isValidTodoName(newTodoName);
     if (err !== "") {
       setNewTodoNameError(err);
@@ -113,34 +138,84 @@ const removeCompletedTodos = () => {
       isDone: false,
       priority: newTodoPriority,
       url: newTodourl,
+      price: newTodoPrice,
     };
     const updatedTodos = [...todos, newTodo];
     setTodos(updatedTodos);
     setNewTodoName("");
     setNewTodoPriority(3);
     setNewTodourl("");
+    setNewTodoPrice(null);
+    closeModal();
   };
 
   return (
-    <div className="mx-4 mt-10 max-w-2xl md:mx-auto">
-      <h1 className="mb-4 text-2xl font-bold">TodoApp</h1>
-      <div className="mb-4">
-        <WelcomeMessage
-          name="寝屋川タヌキ"
-          uncompletedCount={uncompletedCount}
-        />
-        
+    <div className="mx-2 mt-6 max-w-2xl md:mx-auto pb-20"> {/* スマホ向けに余白調整 */}
+      <h1 className="mb-6 text-2xl font-bold text-center text-gray-800">カード買い物メモ</h1>
+      
+      {/* --- ヘッダー部分 --- 
+          grid-cols-[1fr_3rem_3.5rem_2rem] 
+          1fr: 名前(残り全部)
+          3rem: 値段
+          3.5rem: 枚数
+          2rem: +/-ボタンの幅
+      */}
+      <div className="hidden sm:grid grid-cols-[2rem_1fr_4rem_4rem_2.5rem] gap-3 px-4 mb-2 text-sm font-bold text-gray-500">
+        <div></div> {/* チェックボックス分 */}
+        <div>カード名</div>
+        <div className="text-right">値段</div>
+        <div className="text-center">枚数</div>
+        <div></div> {/* ボタン分 */}
       </div>
-      <TodoList todos={todos} updateIsDone={updateIsDone} remove={remove} plascard={plascard} />
-       <div>
-  
-</div>
-      <div className="mt-5 space-y-2 rounded-md border p-3">
-        <h2 className="text-lg font-bold">カードの追加</h2>
-        {/* 編集: ここから... */}
-        <div>
-          <div className="flex items-center space-x-2">
-            <label className="font-bold" htmlFor="newTodoName">
+
+      {/* スマホ版の簡易ヘッダー (各カードの上にラベルを置くため、ここではタイトルだけにするか、省略してもOK) */}
+      <div className="sm:hidden flex justify-between px-4 mb-2 text-xs font-bold text-gray-400">
+        <div>リスト</div>
+        <div>詳細設定</div>
+      </div>
+
+      <TodoList
+        todos={todos}
+        updateIsDone={updateIsDone}
+        remove={remove}
+        plascard={plascard}
+        minascard={minascard}
+      />
+      
+      {/* --- ボタン群 (固定フッターにするとスマホで押しやすいですが、今回は通常配置) --- */}
+      <div className="mt-8 flex flex-col sm:flex-row gap-4 px-2">
+        <button
+          onClick={openModal}
+          className="w-full rounded-lg bg-indigo-600 px-4 py-3 font-bold text-white shadow-lg hover:bg-indigo-700 active:scale-95 transition-transform"
+        >
+        + カードを追加
+        </button>
+
+        <button
+          type="button"
+          onClick={removeCompletedTodos}
+          className="w-full rounded-lg bg-gray-200 px-4 py-3 font-bold text-gray-600 shadow hover:bg-gray-300 active:scale-95 transition-transform"
+        >
+          完了済みを削除
+        </button>
+      </div>
+
+      {/* --- ダイアログ (内容はそのまま) --- */}
+      <dialog
+        ref={dialogRef}
+        className="p-0 rounded-xl shadow-2xl backdrop:bg-black/60 w-[90%] max-w-md"
+        onClick={(e) => {
+            if (e.target === dialogRef.current) closeModal();
+        }}
+      >
+        <div className="p-6 bg-white">
+          <h2 className="mb-4 text-lg font-bold text-gray-800 border-b pb-2">
+            カードの追加
+          </h2>
+
+          {/* カードの名前 */}
+          <div className="mb-4">
+            <label className="block mb-1 font-bold text-sm text-gray-700" htmlFor="newTodoName">
               カードの名前
             </label>
             <input
@@ -149,77 +224,98 @@ const removeCompletedTodos = () => {
               value={newTodoName}
               onChange={updateNewTodoName}
               className={twMerge(
-                "grow rounded-md border p-2",
-                newTodoNameError && "border-red-500 outline-red-500"
+                "w-full rounded-md border border-gray-300 p-3 text-base focus:outline-none focus:ring-2 focus:ring-indigo-500",
+                newTodoNameError && "border-red-500 ring-1 ring-red-500"
               )}
-              placeholder="2文字以上、113文字以内で入力してください"
+              placeholder="カード名を入力"
             />
-            
+            {newTodoNameError && (
+              <div className="mt-1 flex items-center text-xs font-bold text-red-500">
+                <FontAwesomeIcon
+                  icon={faTriangleExclamation}
+                  className="mr-1"
+                />
+                {newTodoNameError}
+              </div>
+            )}
           </div>
-          {newTodoNameError && (
-            <div className="ml-10 flex items-center space-x-1 text-sm font-bold text-red-500">
-              <FontAwesomeIcon
-                icon={faTriangleExclamation}
-                className="mr-0.5"
-              />
-              <div>{newTodoNameError}</div>
+
+          {/* 必要枚数 */}
+          <div className="mb-4">
+            <div className="mb-2 font-bold text-sm text-gray-700">必要枚数</div>
+            <div className="flex justify-between gap-2">
+              {[1, 2, 3, 4].map((value) => (
+                <label key={value} className={`
+                    flex-1 flex items-center justify-center py-2 rounded-md border cursor-pointer transition-colors
+                    ${newTodoPriority === value ? 'bg-indigo-100 border-indigo-500 text-indigo-700 font-bold' : 'bg-gray-50 border-gray-200'}
+                `}>
+                  <input
+                    type="radio"
+                    name="priorityGroup"
+                    value={value}
+                    checked={newTodoPriority === value}
+                    onChange={updateNewTodoPriority}
+                    className="hidden" // ラジオボタン自体は隠してラベルのデザインで見せる
+                  />
+                  <span>{value}</span>
+                </label>
+              ))}
             </div>
-          )}
-        </div>
-        {/* ...ここまで */}
-        
-        <div className="flex gap-5">
-          <div className="font-bold">必要枚数</div>
-          {[1, 2, 3,4].map((value) => (
-            <label key={value} className="flex items-center space-x-1">
-              <input
-                id={`priority-${value}`}
-                name="priorityGroup"
-                type="radio"
-                value={value}
-                checked={newTodoPriority === value}
-                onChange={updateNewTodoPriority}
-              />
-              <span>{value}</span>
-            </label>
-          ))}
-        </div>
-        <div className="flex items-center space-x-2">
-            <label className="font-bold" htmlFor="newTodoUrl">
-              使うデッキのURL (任意)
+          </div>
+
+          <div className="flex gap-4 mb-6">
+            <div className="flex-1">
+                <label className="block mb-1 font-bold text-sm text-gray-700" htmlFor="newTodoPrice">
+                値段 (円)
+                </label>
+                <input
+                id="newTodoPrice"
+                type="number"
+                value={newTodoPrice || ""}
+                onChange={updateNewTodoPrice}
+                className="w-full rounded-md border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                placeholder="100"
+                />
+            </div>
+          </div>
+
+          {/* URL */}
+          <div className="mb-8">
+            <label className="block mb-1 font-bold text-sm text-gray-700" htmlFor="newTodoUrl">
+              参考URL
             </label>
             <input
               id="newTodoUrl"
               type="text"
-              value={newTodourl?newTodourl:""}
+              value={newTodourl || ""}
               onChange={updateNewTodourl}
-              className={twMerge(
-                "grow rounded-md border p-2",
-              )}
+              className="w-full rounded-md border border-gray-300 p-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              placeholder="https://..."
             />
           </div>
-        <button
-          type="button"
-          onClick={addNewTodo}
-          className={twMerge(
-            "rounded-md bg-indigo-500 px-3 py-1 font-bold text-white hover:bg-indigo-600",
-            newTodoNameError && "cursor-not-allowed opacity-50"
-          )}
-        >
-        
-          追加
-        </button>
 
-        <button
-  type="button"
-  onClick={removeCompletedTodos}
-  className={
-    "mt-5 rounded-md bg-red-500 px-3 py-1 font-bold text-white hover:bg-red-600"
-  }
->
-  完了済みのタスクを削除
-</button>
-      </div>
+          {/* アクションボタン */}
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={closeModal}
+              className="rounded-lg bg-gray-100 px-4 py-2 font-bold text-gray-600 hover:bg-gray-200"
+            >
+              キャンセル
+            </button>
+            <button
+              type="button"
+              onClick={addNewTodo}
+              disabled={!!newTodoNameError || newTodoName === ""}
+              className={twMerge(
+                "rounded-lg bg-indigo-600 px-6 py-2 font-bold text-white shadow hover:bg-indigo-700",
+                (newTodoNameError || newTodoName === "") && "cursor-not-allowed opacity-50"
+              )}
+            >
+              追加
+            </button>
+          </div>
+        </div>
+      </dialog>
     </div>
   );
 };

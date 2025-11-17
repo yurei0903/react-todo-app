@@ -6,7 +6,8 @@ type Props = {
   todos: Todo[];
   updateIsDone: (id: string, value: boolean) => void;
   remove: (id: string) => void;
-  plascard: (value: number) => void;
+  plascard: (id: string,value: number) => void;
+  minascard: (id: string,value: number) => void;
 };
 
 const TodoList = (props: Props) => {
@@ -29,6 +30,7 @@ const TodoList = (props: Props) => {
           remove={props.remove}
           updateIsDone={props.updateIsDone}
           plascard={props.plascard}
+          minascard={props.minascard}
         />
       ))}
     </div>
