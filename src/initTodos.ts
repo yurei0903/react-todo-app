@@ -6,20 +6,20 @@ export const initTodos: Todo[] = [
     name: "解析2の宿題",
     isDone: false,
     priority: 3,
-    deadline: new Date(2024, 10, 2, 17, 30),
+    url: null,
   },
   {
     id: uuid(),
     name: "TypeScriptの勉強 (復習)",
     isDone: false,
     priority: 3,
-    deadline: new Date(2024, 10, 1, 17, 30), // このTodoには期限を設定しない
+    url: null,
   },
   {
     id: uuid(),
     name: "基礎物理学3の宿題",
     isDone: false,
     priority: 3,
-    deadline: new Date(2024, 10, 11),
+    url: "https://takeshiwada1980.github.io/Programming3-2025/lecture04.html",
   },
 ];
