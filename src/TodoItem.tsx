@@ -20,7 +20,7 @@ const TodoItem = (props: Props) => {
         todo.isDone && "bg-gray-50 opacity-60"
     )}>
       {/* 上段：メイン情報 (Gridレイアウト) */}
-      <div className="grid grid-cols-[2rem_1fr_auto_auto_2rem] gap-3 items-center">
+      <div className="grid grid-cols-[2rem_1fr_auto_auto_auto_2rem] gap-3 items-center">
         
         {/* 1. チェックボックス */}
         <div className="flex justify-center">
@@ -44,15 +44,21 @@ const TodoItem = (props: Props) => {
         </div>
 
         {/* 3. 値段 */}
-        <div className="flex flex-col items-end min-w-[3.5rem]">
+        <div className="flex flex-col items-end min-w-">
             <span className="text-[10px] text-gray-400 font-bold leading-none mb-0.5">単価</span>
             <span className="text-sm font-medium text-gray-600">
                 {todo.price ? `¥${todo.price}` : "-"}
             </span>
         </div>
+        <div className="flex flex-col items-end min-w-">
+            <span className="text-[10px] text-gray-400 font-bold leading-none mb-0.5">合計</span>
+            <span className="text-sm font-medium text-gray-600">
+                {todo.price ? `¥${todo.price*todo.priority}` : "-"}
+            </span>
+        </div>
 
         {/* 4. 枚数 (重要情報なので少し大きく) */}
-        <div className="flex flex-col items-center min-w-[2.5rem]">
+        <div className="flex flex-col items-center min-w-">
              <span className="text-[10px] text-gray-400 font-bold leading-none mb-0.5">枚数</span>
              <span className="text-lg font-bold text-indigo-600">
                 {todo.priority}

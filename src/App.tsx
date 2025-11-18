@@ -71,7 +71,11 @@ const App = () => {
   const plascard = (id: string, value: number) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, priority: value + 1 };
+        todo={ ...todo, priority: value + 1 }
+        if (todo.priority > 0) {
+          todo={ ...todo, isDone: false};
+        }
+        return todo;
       } else {
         return todo;
       }
@@ -82,7 +86,11 @@ const App = () => {
   const minascard = (id: string, value: number) => {
     const updatedTodos = todos.map((todo) => {
       if (todo.id === id) {
-        return { ...todo, priority: value - 1 };
+        todo={ ...todo, priority: value - 1 };
+        if (todo.priority === 0) {
+          todo={ ...todo, isDone: true};
+        }
+        return todo
       } else {
         return todo;
       }
@@ -90,9 +98,10 @@ const App = () => {
     setTodos(updatedTodos);
   };
 
+
   const isValidTodoName = (name: string): string => {
-    if (name.length < 2 || name.length > 113) {
-      return "2文字以上、113文字以内で入力してください";
+    if (name.length > 113) {
+      return "113文字以内で入力してください";
     } else {
       return "";
     }
@@ -160,10 +169,11 @@ const App = () => {
           3.5rem: 枚数
           2rem: +/-ボタンの幅
       */}
-      <div className="hidden sm:grid grid-cols-[2rem_1fr_4rem_4rem_2.5rem] gap-3 px-4 mb-2 text-sm font-bold text-gray-500">
+      <div className="hidden sm:grid grid-cols-[2rem_1fr_4rem_4rem_4rem_2.5rem] gap-3 px-4 mb-2 text-sm font-bold text-gray-500">
         <div></div> {/* チェックボックス分 */}
         <div>カード名</div>
         <div className="text-right">値段</div>
+        <div className="text-right">合計値段</div>
         <div className="text-center">枚数</div>
         <div></div> {/* ボタン分 */}
       </div>
