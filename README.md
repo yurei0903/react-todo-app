@@ -18,7 +18,7 @@ React、TypeScript、Tailwind CSS を使用し、ローカルストレージで�
  ### 普段表示される画面
  ![Image](https://github.com/user-attachments/assets/86d42b20-4223-424d-9f94-fbe47d2d490a)
  ### カードが登録されてない時に表示される画面
- ![Image 2](picture\nanimonai.jpg)
+ ![Image](https://github.com/user-attachments/assets/dafd25a6-8e0a-48d0-a57f-000b433f714e)
  
  ## ダイアログ
  - カード名入力欄
