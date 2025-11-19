@@ -204,7 +204,7 @@ const App = () => {
         <button
           type="button"
           onClick={removeCompletedTodos}
-          className="w-full rounded-lg bg-gray-200 px-4 py-3 font-bold text-gray-600 shadow hover:bg-gray-300 active:scale-95 transition-transform"
+          className="w-full rounded-lg bg-gray-200 px-4 py-3 font-bold text-gray-600 shadow hover:bg-gray-300 active:scale-95 transition-transform "
         >
           完了済みを削除
         </button>
@@ -212,19 +212,20 @@ const App = () => {
 
       {/* --- ダイアログ (内容はそのまま) --- */}
       <dialog
-        ref={dialogRef}
-        className="p-0 rounded-xl shadow-2xl backdrop:bg-black/60 w-[90%] max-w-md"
+  ref={dialogRef}
+  className="p-0 rounded-xl shadow-2xl backdrop:bg-black/60 w-[90%] max-w-md 
+             ** left-1/2 -translate-x-1/2 -translate-y-1/2**"
         onClick={(e) => {
             if (e.target === dialogRef.current) closeModal();
         }}
       >
-        <div className="p-6 bg-white">
+        <div className="p-6 bg-white mx-auto">
           <h2 className="mb-4 text-lg font-bold text-gray-800 border-b pb-2">
             カードの追加
           </h2>
 
           {/* カードの名前 */}
-          <div className="mb-4">
+          <div className="mb-4 ">
             <label className="block mb-1 font-bold text-sm text-gray-700" htmlFor="newTodoName">
               カードの名前
             </label>
