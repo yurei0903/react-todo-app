@@ -16,7 +16,7 @@ React、TypeScript、Tailwind CSS を使用し、ローカルストレージで�
  - 歯車マークの設定ボタン
 
  ### 普段表示される画面
- ![Image 1](picture\main.jpg)
+ ![Image](https://github.com/user-attachments/assets/86d42b20-4223-424d-9f94-fbe47d2d490a)
  ### カードが登録されてない時に表示される画面
  ![Image 2](picture\nanimonai.jpg)
  
