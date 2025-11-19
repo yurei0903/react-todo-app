@@ -2,13 +2,18 @@
 import React from "react";
 import type { Todo } from "./types";
 import { twMerge } from "tailwind-merge";
-
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faGear } from "@fortawesome/free-solid-svg-icons";
 type Props = {
   todo: Todo;
   updateIsDone: (id: string, value: boolean) => void;
   remove: (id: string) => void;
   plascard: (id: string, value: number) => void;
   minascard: (id: string, value: number) => void;
+  openModal: () => void;
+  
 };
 
 const TodoItem = (props: Props) => {
@@ -20,7 +25,7 @@ const TodoItem = (props: Props) => {
         todo.isDone && "bg-gray-50 opacity-60"
     )}>
       {/* 上段：メイン情報 (Gridレイアウト) */}
-      <div className="grid grid-cols-[2rem_1fr_auto_auto_auto_2rem] gap-3 items-center">
+      <div className="grid grid-cols-[2rem_1fr_auto_auto_auto_2rem_2rem] gap-3 items-center">
         
         {/* 1. チェックボックス */}
         <div className="flex justify-center">
@@ -80,7 +85,16 @@ const TodoItem = (props: Props) => {
             >
             -
             </button>
+            
         </div>
+        <div className="flex flex-col gap-1">
+            <button
+                onClick={() => props.openModal()}
+                className="rounded bg-gray-100 hover:bg-indigo-100 active:bg-indigo-300"
+            >
+             <FontAwesomeIcon icon={faGear} />
+            </button>
+            </div>
       </div>
 
       {/* 下段：サブアクション (URLリンク と 削除) */}

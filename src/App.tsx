@@ -190,6 +190,7 @@ const App = () => {
         remove={remove}
         plascard={plascard}
         minascard={minascard}
+        openModal={openModal}
       />
       
       {/* --- ボタン群 (固定フッターにするとスマホで押しやすいですが、今回は通常配置) --- */}

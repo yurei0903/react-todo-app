@@ -8,6 +8,7 @@ type Props = {
   remove: (id: string) => void;
   plascard: (id: string,value: number) => void;
   minascard: (id: string,value: number) => void;
+  openModal: () => void;  
 };
 
 const TodoList = (props: Props) => {
@@ -31,6 +32,7 @@ const TodoList = (props: Props) => {
           updateIsDone={props.updateIsDone}
           plascard={props.plascard}
           minascard={props.minascard}
+          openModal={props.openModal}
         />
       ))}
     </div>
