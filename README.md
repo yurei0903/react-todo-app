@@ -1,4 +1,5 @@
 # TodoApp
+アプリへのリンク
 https://yurei0903.github.io/react-todo-app/
 
 React、TypeScript、Tailwind CSS を使用し、ローカルストレージでデータを永続化した「カードの買い物メモ」です。
