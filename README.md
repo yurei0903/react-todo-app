@@ -16,9 +16,9 @@ React、TypeScript、Tailwind CSS を使用し、ローカルストレージで�
  - 歯車マークの設定ボタン
 
  ### 普段表示される画面
- ![Image 1](picture\main.jpg)
+ ![Image](https://github.com/user-attachments/assets/86d42b20-4223-424d-9f94-fbe47d2d490a)
  ### カードが登録されてない時に表示される画面
- ![Image 2](picture\nanimonai.jpg)
+ ![Image](https://github.com/user-attachments/assets/dafd25a6-8e0a-48d0-a57f-000b433f714e)
  
  ## ダイアログ
  - カード名入力欄
@@ -27,8 +27,7 @@ React、TypeScript、Tailwind CSS を使用し、ローカルストレージで�
  - URL入力欄
  - カードを追加するボタン/キャンセルするボタン
  ### ダイアログで表示される画面
- ![Image 3](picture\kinyu.jpg)
- 
+ ![Image](https://github.com/user-attachments/assets/1e65edb2-4a0a-4d9c-9201-2702de3a4c44)
  
  # 開発経緯
   カードを買いに行くときに今までデッキメーカーというデッキを保存できるウェブに登録したカードを確認しながら買い物をしていたが，カードのおおよその値段の確認ができないうえ，なにを買ったのかわからなくなりがちだったので買い物メモが欲しいと思って作成した．
